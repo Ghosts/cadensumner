@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cadensumner",
+  "main": "./src/worker.ts",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "binding": "ASSETS", "directory": "./dist" },
+  "observability": { "enabled": true },
+  // Live facts (GitHub, npm, AllMCPs) are refreshed on this schedule and stored in KV.
+  // Wrangler provisions the namespace on first deploy.
+  "kv_namespaces": [{ "binding": "FACTS" }],
+  "triggers": { "crons": ["17 */6 * * *"] },
+  "routes": [{ "pattern": "cadensumner.com", "custom_domain": true }]
+}

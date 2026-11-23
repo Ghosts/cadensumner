@@ -1,0 +1,6 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["scripts/*.ts"],
+  "project": ["src/**/*.{ts,astro}", "scripts/**/*.ts", "tests/**/*.ts"],
+  "ignoreDependencies": ["@fontsource-variable/anybody", "@fontsource-variable/geist"]
+}

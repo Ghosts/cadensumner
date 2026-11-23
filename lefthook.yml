@@ -1,0 +1,11 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.{ts,astro,json,jsonc,css}"
+      run: bunx biome check --no-errors-on-unmatched {staged_files}
+
+pre-push:
+  commands:
+    verify:
+      run: bun run lint && bun run typecheck && bun run test
