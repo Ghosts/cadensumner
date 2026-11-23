@@ -10,5 +10,8 @@
   // Wrangler provisions the namespace on first deploy.
   "kv_namespaces": [{ "binding": "FACTS" }],
   "triggers": { "crons": ["17 */6 * * *"] },
-  "routes": [{ "pattern": "cadensumner.com", "custom_domain": true }]
+  "routes": [
+    { "pattern": "cadensumner.com", "custom_domain": true },
+    { "pattern": "www.cadensumner.com", "custom_domain": true }
+  ]
 }

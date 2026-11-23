@@ -7,6 +7,12 @@ import { refreshFacts, saveSnapshot } from "@/facts/store";
  */
 export default {
   fetch(request, env, ctx) {
+    // One canonical address: send www to the bare domain.
+    const url = new URL(request.url);
+    if (url.hostname.startsWith("www.")) {
+      url.hostname = url.hostname.slice(4);
+      return Response.redirect(url.href, 301);
+    }
     return handle(request, env, ctx);
   },
 
