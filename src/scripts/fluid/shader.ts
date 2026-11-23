@@ -16,6 +16,7 @@ uniform vec2 resolution;
 uniform vec2 pointer;
 uniform float time;
 uniform float brightness;
+uniform float warp;
 uniform vec3 colorA;
 uniform vec3 colorB;
 uniform vec3 colorC;
@@ -55,7 +56,7 @@ void main() {
 
   vec2 q = vec2(fbm(uv * 1.3 + time * 0.06), fbm(uv * 1.3 + vec2(5.2, 1.3) - time * 0.05));
   vec2 w = vec2(fbm(uv * 1.1 + 3.0 * q + time * 0.04), fbm(uv * 1.1 + 3.0 * q + vec2(8.3, 2.8)));
-  float field = fbm(uv + 3.4 * w);
+  float field = fbm(uv + warp * w);
 
   float band = abs(fract(field * 11.0 + time * 0.08) - 0.5) * 2.0;
   vec3 color = mix(colorA, colorB, smoothstep(0.25, 0.75, field));

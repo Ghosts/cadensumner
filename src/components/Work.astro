@@ -7,44 +7,69 @@ interface Props {
 }
 
 const { facts } = Astro.props;
+const NEW_TAB = { target: "_blank", rel: "noopener" } as const;
 ---
 
 <section class="section work" id="work" aria-labelledby="work-title">
   <h2 class="visually-hidden" id="work-title">Work</h2>
 
   {
-    projects.map((project) => {
-      const fact = facts[project.fact];
-      return (
-        <article
-          class="card"
-          data-card
-          data-palette={project.palette.join(",")}
-          style={`--surface:${project.surface};--ink:${project.ink};--letters:${project.name.length}`}
-        >
+    projects.map((project) => (
+      <article
+        class="card"
+        data-card
+        data-palette={project.palette.join(",")}
+        data-brightness="0.9"
+        style={`--surface:${project.surface};--ink:${project.ink};--letters:${project.name.length}`}
+      >
+        <div class="top">
+          <p class="identity">
+            <img
+              class:list={["logo", { tiled: project.logoHasTile }]}
+              src={`/logos/${project.logo}`}
+              alt=""
+              width="56"
+              height="56"
+              loading="lazy"
+              decoding="async"
+            />
+            <span>{project.kind}</span>
+          </p>
           <ul class="tags">
             {project.tags.map((tag) => <li>{tag}</li>)}
           </ul>
-          <h3 class="display title">
-            <a href={project.url}>{project.name}</a>
-          </h3>
-          <div class="details">
-            <p class="summary">{project.summary}</p>
-            <p class="fact">
-              <strong>{fact.text}</strong>
-              <span>{fact.label}</span>
-            </p>
-          </div>
-        </article>
-      );
-    })
+        </div>
+
+        <h3 class="display title">
+          <a href={project.url} {...NEW_TAB}>
+            {project.name}
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+        </h3>
+
+        <div class="details">
+          <p class="summary">{project.summary}</p>
+          <ul class="facts">
+            {project.facts.map((id) => (
+              <li>
+                <strong>{facts[id].text}</strong>
+                <span>{facts[id].label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </article>
+    ))
   }
 
   <ul class="more">
     {
       moreProjects.map((project) => (
         <li>
-          <a href={project.url}>{project.name}</a>
+          <a href={project.url} {...NEW_TAB}>
+            {project.name}
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
           <span>{project.summary}</span>
         </li>
       ))
@@ -57,7 +82,11 @@ const { facts } = Astro.props;
     padding-top: 12svh;
   }
 
-  /* Cards pin near the top and stack; each new one slides over the last. */
+  /*
+   * Cards pin near the top and stack; each new one slides over the last.
+   * They are tinted glass, not solid: the canvas behind takes on the project's
+   * colors and shows through, so the whole screen changes with each card.
+   */
   .card {
     position: sticky;
     top: 6svh;
@@ -68,19 +97,50 @@ const { facts } = Astro.props;
     grid-template-rows: auto 1fr auto;
     gap: 1.5rem;
     border-radius: var(--radius);
-    background: var(--surface);
+    background: color-mix(in srgb, var(--surface) 84%, transparent);
+    backdrop-filter: blur(28px) saturate(1.5);
     color: var(--ink);
     container-type: inline-size;
     transform-origin: 50% 0;
     transform: scale(calc(1 - var(--covered, 0) * 0.06));
     filter: brightness(calc(1 - var(--covered, 0) * 0.45));
-    box-shadow: 0 -2rem 5rem -2rem rgb(0 0 0 / 0.7);
+    box-shadow:
+      0 -2rem 5rem -2rem rgb(0 0 0 / 0.7),
+      0 0 9rem -1rem color-mix(in srgb, var(--surface) 55%, transparent);
+  }
+
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .identity {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-weight: 600;
+  }
+
+  /* Marks without their own background sit on a dark tile so they read on any card color. */
+  .logo {
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 0.55rem;
+    border-radius: 0.9rem;
+    background: #0a0a0c;
+  }
+
+  .logo.tiled {
+    padding: 0;
+    background: none;
   }
 
   .tags {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
     gap: 0.4rem;
     font-size: 0.875rem;
     font-weight: 500;
@@ -140,16 +200,23 @@ const { facts } = Astro.props;
     letter-spacing: -0.01em;
   }
 
-  .fact {
-    display: grid;
-    justify-items: end;
-    text-align: right;
-    font-size: 0.95rem;
-    font-weight: 500;
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem clamp(1.25rem, 3cqi, 3rem);
   }
 
-  .fact strong {
-    font: 900 clamp(2.1rem, 4.6vw, 4.75rem) / 1 var(--font-display);
+  .facts li {
+    display: grid;
+    align-content: end;
+    max-width: 13rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
+  .facts strong {
+    font: 900 clamp(1.9rem, 4cqi, 4rem) / 1 var(--font-display);
     font-variation-settings: "wdth" 75;
   }
 
@@ -186,12 +253,5 @@ const { facts } = Astro.props;
 
   :global(.motion) .card:global(.is-active) .title {
     --stretch: 118;
-  }
-
-  @media (max-width: 40rem) {
-    .fact {
-      justify-items: start;
-      text-align: left;
-    }
   }
 </style>

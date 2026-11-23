@@ -19,8 +19,10 @@ export function renderHomeMarkdown(facts: ResolvedFacts): string {
     "## Work",
     "",
     ...projects.map((project) => {
-      const fact = facts[project.fact];
-      return `- [${project.name}](${project.url}): ${project.summary} ${fact.text} ${fact.label} ([source](${fact.source})).`;
+      const numbers = project.facts
+        .map((id) => `${facts[id].text} ${facts[id].label} ([source](${facts[id].source}))`)
+        .join("; ");
+      return `- [${project.name}](${project.url}) (${project.kind}): ${project.summary} ${numbers}.`;
     }),
     ...moreProjects.map((project) => `- [${project.name}](${project.url}): ${project.summary}`),
     "",

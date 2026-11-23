@@ -49,6 +49,20 @@ export function allMcpsServerCount() {
   };
 }
 
+/** Number of categories AllMCPs lists in its own llms.txt. */
+export function allMcpsCategoryCount() {
+  return async (): Promise<number> => {
+    const body = await getText("https://allmcps.com/llms.txt");
+    return parseAllMcpsCategoryCount(body);
+  };
+}
+
+export function parseAllMcpsCategoryCount(llmsTxt: string): number {
+  const list = /\*\*Categories:\*\*(.*)/.exec(llmsTxt)?.[1] ?? "";
+  const count = list.split(",").filter((entry) => entry.trim()).length;
+  return expectCount(count, "AllMCPs category count");
+}
+
 export function parseAllMcpsServerCount(llmsTxt: string): number {
   const match = /Total MCP Servers:\*\*\s*([\d,]+)/.exec(llmsTxt);
   return expectCount(Number(match?.[1]?.replaceAll(",", "")), "AllMCPs server count");

@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { roles } from "@/content/experience";
 import { profile } from "@/content/profile";
@@ -19,16 +20,39 @@ function contrast(a: string, b: string): number {
   return ((light ?? 0) + 0.05) / ((dark ?? 0) + 0.05);
 }
 
+/** The color seen when `top` at the given opacity sits over `under`. */
+function blend(top: string, under: string, opacity: number): string {
+  const mixed = hexToRgb(top).map(
+    (c, i) => c * opacity + (hexToRgb(under)[i] ?? 0) * (1 - opacity),
+  );
+  return `#${mixed
+    .map((c) =>
+      Math.round(c * 255)
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
+}
+
+/** Cards are tinted glass: this much of the card color, the rest is whatever the canvas shows. */
+const CARD_OPACITY = 0.84;
+
 describe("project cards", () => {
   it.each(projects.map((p) => [p.name, p] as const))(
-    "%s text passes WCAG AA on its card color",
+    "%s text passes WCAG AA whatever shows through the card",
     (_name, project) => {
-      expect(contrast(project.surface, project.ink)).toBeGreaterThanOrEqual(4.5);
+      for (const behind of ["#000000", "#ffffff"]) {
+        const surface = blend(project.surface, behind, CARD_OPACITY);
+        expect(contrast(surface, project.ink)).toBeGreaterThanOrEqual(4.5);
+      }
     },
   );
 
-  it("links every project to an https site", () => {
-    for (const project of projects) expect(project.url).toMatch(/^https:\/\//);
+  it("links every project to an https site and gives it a logo", () => {
+    for (const project of projects) {
+      expect(project.url).toMatch(/^https:\/\//);
+      expect(existsSync(`public/logos/${project.logo}`)).toBe(true);
+    }
   });
 });
 

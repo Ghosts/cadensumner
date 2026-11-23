@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { projects } from "@/content/work";
 import { facts } from "@/facts/registry";
-import { expectCount, parseAllMcpsServerCount } from "@/facts/sources";
+import { expectCount, parseAllMcpsCategoryCount, parseAllMcpsServerCount } from "@/facts/sources";
 import {
   type FactStorage,
   formatFact,
@@ -22,7 +22,11 @@ describe("facts registry", () => {
   });
 
   it("backs every project card with a registered fact", () => {
-    for (const project of projects) expect(facts).toHaveProperty(project.fact);
+    for (const project of projects) {
+      expect(project.facts.length).toBeGreaterThanOrEqual(1);
+      expect(project.facts.length).toBeLessThanOrEqual(3);
+      for (const id of project.facts) expect(facts).toHaveProperty(id);
+    }
   });
 });
 
@@ -54,7 +58,7 @@ describe("refreshFacts", () => {
       "fetch",
       vi.fn(async (url: string) =>
         url.includes("allmcps.com")
-          ? new Response("- **Total MCP Servers:** 33,001 (as of today)")
+          ? new Response("- **Total MCP Servers:** 33,001\n- **Categories:** One, Two")
           : new Response("unavailable", { status: 503 }),
       ),
     );
@@ -62,7 +66,7 @@ describe("refreshFacts", () => {
 
     const snapshot = await refreshFacts({}, new Date("2026-12-01T00:00:00Z"));
 
-    expect(snapshot.values).toEqual({ allMcpsServers: 33001 });
+    expect(snapshot.values).toEqual({ allMcpsServers: 33001, allMcpsCategories: 2 });
     expect(snapshot.refreshedAt).toBe("2026-12-01T00:00:00.000Z");
   });
 });
@@ -85,6 +89,11 @@ describe("loadSnapshot", () => {
 describe("source parsing", () => {
   it("reads the server count from the AllMCPs llms.txt", () => {
     expect(parseAllMcpsServerCount("- **Total MCP Servers:** 32606 (as of Nov 23)")).toBe(32606);
+  });
+
+  it("counts the categories in the AllMCPs llms.txt", () => {
+    expect(parseAllMcpsCategoryCount("- **Categories:** Databases, Security, Gaming")).toBe(3);
+    expect(() => parseAllMcpsCategoryCount("nothing here")).toThrow(/positive integer/);
   });
 
   it("rejects values that are not positive integers", () => {

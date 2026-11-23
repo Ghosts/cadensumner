@@ -117,12 +117,14 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test("every project card opens its site", async ({ page }) => {
+test("every project card opens its site in a new tab", async ({ page }) => {
   await page.goto("/");
   const links = page.locator("[data-card] h3 a");
   await expect(links).toHaveCount(5);
   for (const link of await links.all()) {
     await expect(link).toHaveAttribute("href", /^https:\/\//);
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", /noopener/);
     // The link covers the whole card, so a click anywhere on it follows the link.
     const card = link.locator("xpath=ancestor::article");
     const [linkBox, cardBox] = [await link.evaluate(coverBox), await card.boundingBox()];

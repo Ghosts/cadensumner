@@ -1,4 +1,9 @@
-import { allMcpsServerCount, githubContributions, npmMonthlyDownloads } from "./sources";
+import {
+  allMcpsCategoryCount,
+  allMcpsServerCount,
+  githubContributions,
+  npmMonthlyDownloads,
+} from "./sources";
 import type { Fact } from "./types";
 
 /**
@@ -19,6 +24,25 @@ export const facts = {
     asOf: "2026-11-23",
     source: "https://allmcps.com/llms.txt",
     refresh: allMcpsServerCount(),
+  },
+  allMcpsCategories: {
+    value: 51,
+    label: "categories",
+    asOf: "2026-11-23",
+    source: "https://allmcps.com/llms.txt",
+    refresh: allMcpsCategoryCount(),
+  },
+  allMcpsClients: {
+    value: 13,
+    label: "clients with install configs",
+    asOf: "2026-11-23",
+    source: "https://allmcps.com/llms.txt",
+  },
+  jackalopePlatforms: {
+    value: 3,
+    label: "platforms: Windows, macOS, Linux",
+    asOf: "2026-11-23",
+    source: "https://jackalope.dev",
   },
   jackalopeAgents: {
     value: 7,

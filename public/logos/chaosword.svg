@@ -1,0 +1,36 @@
+<svg width="512" height="512" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Crisp Frame -->
+  <rect x="2" y="2" width="48" height="48" rx="6" fill="#18181b" />
+
+  <!-- 3x3 Grid Cells -->
+  <!-- Row 0 -->
+  <rect x="4" y="4" width="13" height="13" rx="2" fill="#fde047" />
+  <text x="10.5" y="13.7" fill="#18181b" font-family="'IBM Plex Mono', monospace" font-weight="900" font-size="10.5" text-anchor="middle">C</text>
+
+  <rect x="19.5" y="4" width="13" height="13" rx="2" fill="#ffffff" />
+  <text x="26" y="13.7" fill="#18181b" font-family="'IBM Plex Mono', monospace" font-weight="900" font-size="10.5" text-anchor="middle">H</text>
+
+  <rect x="35" y="4" width="13" height="13" rx="2" fill="#d61f69" />
+  <text x="41.5" y="13.7" fill="#ffffff" font-family="'IBM Plex Mono', monospace" font-weight="900" font-size="10.5" text-anchor="middle">!</text>
+
+  <!-- Row 1 -->
+  <rect x="4" y="19.5" width="13" height="13" rx="2" fill="#ffffff" />
+  <text x="10.5" y="29.2" fill="#18181b" font-family="'IBM Plex Mono', monospace" font-weight="900" font-size="10.5" text-anchor="middle">W</text>
+
+  <rect x="19.5" y="19.5" width="13" height="13" rx="2" fill="#27272a" />
+  <line x1="21" y1="21" x2="31" y2="31" stroke="#52525b" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="31" y1="21" x2="21" y2="31" stroke="#52525b" stroke-width="1.5" stroke-linecap="round" />
+
+  <rect x="35" y="19.5" width="13" height="13" rx="2" fill="#ffffff" />
+  <text x="41.5" y="29.2" fill="#18181b" font-family="'IBM Plex Mono', monospace" font-weight="900" font-size="10.5" text-anchor="middle">O</text>
+
+  <!-- Row 2 -->
+  <rect x="4" y="35" width="13" height="13" rx="2" fill="#d61f69" />
+  <text x="10.5" y="44.7" fill="#ffffff" font-family="'IBM Plex Mono', monospace" font-weight="900" font-size="10.5" text-anchor="middle">R</text>
+
+  <rect x="19.5" y="35" width="13" height="13" rx="2" fill="#ffffff" />
+  <text x="26" y="44.7" fill="#18181b" font-family="'IBM Plex Mono', monospace" font-weight="900" font-size="10.5" text-anchor="middle">D</text>
+
+  <rect x="35" y="35" width="13" height="13" rx="2" fill="#fde047" />
+  <text x="41.5" y="44.7" fill="#18181b" font-family="'IBM Plex Mono', monospace" font-weight="900" font-size="10.5" text-anchor="middle">*</text>
+</svg>

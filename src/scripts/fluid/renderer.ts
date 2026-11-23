@@ -7,6 +7,8 @@ interface FluidFrame {
   /** Pointer position in the shader's coordinates (origin at center, y up). */
   pointer: readonly [number, number];
   brightness: number;
+  /** How strongly the field folds over itself. About 3.4 at rest; higher looks more turbulent. */
+  warp: number;
   colors: readonly [Rgb, Rgb, Rgb];
 }
 
@@ -26,6 +28,7 @@ const UNIFORMS = [
   "pointer",
   "time",
   "brightness",
+  "warp",
   "colorA",
   "colorB",
   "colorC",
@@ -121,6 +124,7 @@ export function createFluid(canvas: HTMLCanvasElement): Fluid | null {
       gl.uniform2f(uniform.pointer, frame.pointer[0], frame.pointer[1]);
       gl.uniform1f(uniform.time, frame.time);
       gl.uniform1f(uniform.brightness, frame.brightness);
+      gl.uniform1f(uniform.warp, frame.warp);
       gl.uniform3fv(uniform.colorA, frame.colors[0]);
       gl.uniform3fv(uniform.colorB, frame.colors[1]);
       gl.uniform3fv(uniform.colorC, frame.colors[2]);

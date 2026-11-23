@@ -22,7 +22,8 @@ export interface HeroState {
 }
 
 const MAX_ZOOM = 90;
-const READING_BRIGHTNESS = 0.38;
+/** Canvas brightness under body text, where white type has to stay readable. */
+export const READING_BRIGHTNESS = 0.38;
 
 /** Where the hero is for a scroll progress of 0 (top of page) to 1 (hero finished). */
 export function heroState(progress: number): HeroState {
@@ -38,6 +39,19 @@ export function heroState(progress: number): HeroState {
 /** How far an element has scrolled through a range, as 0 to 1. */
 export function progressThrough(position: number, start: number, end: number): number {
   return clamp((position - start) / (end - start));
+}
+
+/**
+ * How stirred up the field is, from how fast the page is scrolling. Rises quickly
+ * with scroll speed and decays on its own, so the background surges while you
+ * scroll and settles when you stop.
+ *
+ * @param energy current energy, 0 (calm) to 1 (fully stirred)
+ * @param scrolled distance scrolled this frame, as a fraction of the viewport height
+ */
+export function scrollEnergy(energy: number, scrolled: number): number {
+  const pushed = Math.max(energy, clamp(Math.abs(scrolled) * 18));
+  return pushed * 0.94;
 }
 
 export type Rgb = [number, number, number];
