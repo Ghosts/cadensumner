@@ -1,0 +1,293 @@
+---
+// Imported here, not with @import in the style block, so the font file URLs are resolved by the build.
+import "@fontsource-variable/geist/wght.css";
+import { roles } from "@/content/experience";
+import { profile } from "@/content/profile";
+import { projects } from "@/content/work";
+import { formatPeriod } from "@/lib/markdown";
+
+/**
+ * A plain resume built from the same content as the homepage. It is meant to be
+ * printed: `bun run assets` renders this page to the PDF linked from the site.
+ * No shader and no script, so it prints the same everywhere.
+ */
+const email = profile.links.find((link) => link.url.startsWith("mailto:"))?.url.slice(7);
+const webLinks = profile.links.filter((link) => link.url.startsWith("https://"));
+const withoutProtocol = (url: string) => url.replace(/^https:\/\/(www\.)?/, "");
+const title = `${profile.name}: resume`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={`Resume of ${profile.name}, ${profile.role.toLowerCase()} in ${profile.location}.`} />
+    <link rel="canonical" href={new URL("/resume", Astro.site).href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/pdf" href={profile.resumePdf} title="Resume (PDF)" />
+    <link rel="alternate" type="application/json" href="/resume.json" title="Resume (JSON Resume)" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>{profile.name}</h1>
+        <p class="role">{profile.role}, {profile.location}</p>
+        <ul class="contact">
+          <li><a href={`mailto:${email}`}>{email}</a></li>
+          <li><a href={profile.url}>{withoutProtocol(profile.url)}</a></li>
+          {webLinks.map((link) => <li><a href={link.url}>{withoutProtocol(link.url)}</a></li>)}
+        </ul>
+        <p class="summary">{profile.summary}</p>
+        <p class="screen-only"><a href={profile.resumePdf}>Download as PDF</a></p>
+      </header>
+
+      <section aria-labelledby="experience">
+        <h2 id="experience">Experience</h2>
+        {
+          roles.map((role) => (
+            <article>
+              <h3>
+                {role.company} <span>{role.title}</span>
+              </h3>
+              <p class="period">{formatPeriod(role.start, role.end)}</p>
+              <ul>
+                {role.highlights.map((highlight) => <li>{highlight}</li>)}
+              </ul>
+            </article>
+          ))
+        }
+      </section>
+
+      <section aria-labelledby="projects">
+        <h2 id="projects">Products built at Jackalope Digital</h2>
+        <ul class="projects">
+          {
+            projects.map((project) => (
+              <li>
+                <a href={project.url}>{project.name}</a> ({project.tags.join(", ")}). {project.summary}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section aria-labelledby="skills">
+        <h2 id="skills">Skills</h2>
+        <dl>
+          {
+            profile.skills.map((group) => (
+              <>
+                <dt>{group.area}</dt>
+                <dd>{group.items.join(", ")}</dd>
+              </>
+            ))
+          }
+        </dl>
+      </section>
+
+      <section aria-labelledby="education">
+        <h2 id="education">Education</h2>
+        <p>{profile.education}</p>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --ink: #17141f;
+    --soft: #56506a;
+    --line: #dcd8e6;
+    --accent: #4a2fc0;
+    color-scheme: light;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--ink);
+    font: 400 0.9375rem / 1.5 "Geist Variable", system-ui, sans-serif;
+  }
+
+  main {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  ul,
+  dl,
+  dd {
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .role {
+    margin-top: 0.25rem;
+    font-size: 1.1rem;
+    color: var(--soft);
+  }
+
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    margin-top: 0.9rem;
+    list-style: none;
+    font-size: 0.875rem;
+  }
+
+  .summary {
+    margin-top: 0.9rem;
+  }
+
+  .screen-only {
+    margin-top: 0.9rem;
+    font-weight: 600;
+  }
+
+  a {
+    color: var(--accent);
+    text-underline-offset: 0.18em;
+  }
+
+  section {
+    margin-top: 1.75rem;
+  }
+
+  h2 {
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+
+  article {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.25rem 1rem;
+    margin-top: 1rem;
+    break-inside: avoid;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  h3 span {
+    font-weight: 400;
+    color: var(--soft);
+  }
+
+  h3 span::before {
+    content: "· ";
+  }
+
+  .period {
+    color: var(--soft);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  article ul {
+    grid-column: 1 / -1;
+    padding-left: 1.1rem;
+  }
+
+  article li + li {
+    margin-top: 0.2rem;
+  }
+
+  .projects {
+    margin-top: 0.75rem;
+    padding-left: 1.1rem;
+  }
+
+  .projects li + li {
+    margin-top: 0.3rem;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.3rem 1.25rem;
+    margin-top: 0.75rem;
+  }
+
+  dt {
+    color: var(--soft);
+  }
+
+  section > p {
+    margin-top: 0.75rem;
+  }
+
+  @page {
+    size: letter;
+    margin: 0.5in 0.6in;
+  }
+
+  /* Tightened so the whole resume fits on one letter page. */
+  @media print {
+    body {
+      font-size: 8.4pt;
+      line-height: 1.33;
+    }
+
+    h1 {
+      font-size: 19pt;
+    }
+
+    section {
+      margin-top: 0.7rem;
+    }
+
+    article {
+      margin-top: 0.45rem;
+    }
+
+    .contact {
+      gap: 0.2rem 0.8rem;
+      font-size: 8.4pt;
+    }
+
+    .projects,
+    dl,
+    section > p {
+      margin-top: 0.5rem;
+    }
+
+    main {
+      max-width: none;
+      padding: 0;
+    }
+
+    .screen-only {
+      display: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+</style>

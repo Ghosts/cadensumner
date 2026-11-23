@@ -48,3 +48,19 @@ test("the page advertises its alternates and structured data", async ({ page }) 
   expect(jsonLd["@type"]).toBe("ProfilePage");
   expect(jsonLd.mainEntity.sameAs).toContain("https://github.com/Ghosts");
 });
+
+test("/resume is a printable page with a PDF copy", async ({ page, request }) => {
+  await page.goto("/resume");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Caden Sumner");
+  await expect(page.getByRole("heading", { name: "Experience" })).toBeVisible();
+  const pdf = await request.get("/caden-sumner-resume.pdf");
+  expect(pdf.headers()["content-type"]).toContain("application/pdf");
+});
+
+test("shared links get a preview image", async ({ page, request }) => {
+  await page.goto("/");
+  const image = await page.locator('meta[property="og:image"]').getAttribute("content");
+  expect(image).toBe("https://cadensumner.com/share.jpg");
+  const response = await request.get("/share.jpg");
+  expect(response.headers()["content-type"]).toContain("image/jpeg");
+});

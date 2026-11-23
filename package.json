@@ -21,6 +21,7 @@
     "test:e2e": "playwright test",
     "lighthouse": "lhci autorun",
     "facts": "bun scripts/refresh-facts.ts",
+    "assets": "node scripts/render-assets.ts",
     "verify": "bun run lint && bun run typecheck && bun run unused && bun run test && bun run build && bun run test:e2e"
   },
   "dependencies": {

@@ -38,7 +38,7 @@ export function renderHomeMarkdown(facts: ResolvedFacts): string {
     "",
     ...profile.links.map((link) => `- [${link.label}](${link.url})`),
     "",
-    `Structured resume: ${profile.url}/resume.json`,
+    `Resume: ${profile.url}/resume (PDF: ${profile.url}${profile.resumePdf}, JSON: ${profile.url}/resume.json)`,
     "",
   ];
   return lines.join("\n");

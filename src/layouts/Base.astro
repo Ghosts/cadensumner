@@ -11,6 +11,8 @@ interface Props {
 
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+/** Rendered from the live hero by `bun run assets`. Link previews need an absolute URL. */
+const shareImage = new URL("/share.jpg", Astro.site).href;
 ---
 
 <!doctype html>
@@ -29,7 +31,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={shareImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${profile.name}, ${profile.role.toLowerCase()}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={shareImage} />
 
     {/* Machine-readable versions of this page. Agents find them here, so the page needs no visible notice. */}
     <link rel="alternate" type="text/markdown" href="/index.md" title={`${profile.name} (Markdown)`} />

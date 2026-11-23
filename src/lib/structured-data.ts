@@ -47,7 +47,9 @@ export function jsonResume() {
       startDate: role.start,
       ...(role.end ? { endDate: role.end } : {}),
       summary: role.summary,
+      highlights: role.highlights,
     })),
+    skills: profile.skills.map((group) => ({ name: group.area, keywords: group.items })),
     education: [
       {
         institution: "Michigan Technological University",

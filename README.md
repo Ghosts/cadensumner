@@ -33,15 +33,23 @@ value if a source is down, so a failed fetch never shows a blank or a wrong numb
 
 `bun run facts` prints live values next to the committed ones.
 
+### Generated files
+
+The resume PDF and the link-preview image are rendered from the running site, so they
+cannot drift from it. With `bun run preview` running, `bun run assets` prints `/resume` to
+`public/caden-sumner-resume.pdf` and screenshots the hero to `public/share.jpg`. Run it after
+changing content or the hero, and commit the results.
+
 ### One URL, three formats
 
-| Request                              | Response                                      |
-| ------------------------------------ | --------------------------------------------- |
-| `GET /` from a browser               | The page                                      |
-| `GET /` with `Accept: text/markdown` | The same content as Markdown                  |
-| `GET /index.md`                      | Markdown, for clients that cannot set headers |
-| `GET /resume.json`                   | [JSON Resume](https://jsonresume.org)         |
-| `GET /llms.txt`                      | Index of the above                            |
+| Request                              | Response                                             |
+| ------------------------------------ | ---------------------------------------------------- |
+| `GET /` from a browser               | The page                                             |
+| `GET /` with `Accept: text/markdown` | The same content as Markdown                         |
+| `GET /index.md`                      | Markdown, for clients that cannot set headers        |
+| `GET /resume.json`                   | [JSON Resume](https://jsonresume.org)                |
+| `GET /resume`                        | Printable resume, also at `/caden-sumner-resume.pdf` |
+| `GET /llms.txt`                      | Index of the above                                   |
 
 All of them are generated from `src/content`, so they cannot drift apart.
 
