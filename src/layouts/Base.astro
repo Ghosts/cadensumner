@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css";
+import displayFontUrl from "@fontsource-variable/anybody/files/anybody-latin-wdth-normal.woff2?url";
 import { profile } from "@/content/profile";
 import { profilePageJsonLd } from "@/lib/structured-data";
 
@@ -21,6 +22,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={displayFontUrl} as="font" type="font/woff2" crossorigin />
     <meta name="theme-color" content="#060509" />
 
     <meta property="og:type" content="profile" />

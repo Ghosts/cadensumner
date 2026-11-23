@@ -1,5 +1,5 @@
 ---
-import { moreProjects, projects } from "@/content/work";
+import { projects } from "@/content/work";
 import type { ResolvedFacts } from "@/facts/store";
 
 interface Props {
@@ -61,25 +61,11 @@ const NEW_TAB = { target: "_blank", rel: "noopener" } as const;
       </article>
     ))
   }
-
-  <ul class="more">
-    {
-      moreProjects.map((project) => (
-        <li>
-          <a href={project.url} {...NEW_TAB}>
-            {project.name}
-            <span class="visually-hidden">(opens in a new tab)</span>
-          </a>
-          <span>{project.summary}</span>
-        </li>
-      ))
-    }
-  </ul>
 </section>
 
 <style>
   .work {
-    padding-top: 12svh;
+    padding-block: 12svh 4svh;
   }
 
   /*
@@ -157,10 +143,23 @@ const NEW_TAB = { target: "_blank", rel: "noopener" } as const;
    * 0.9em wide there, so dividing the card width by (letters x 0.9) always fits.
    */
   .title {
-    --stretch: 118;
+    --wide: 118;
+    --letter-width: 0.9;
+    --stretch: var(--wide);
     align-self: center;
-    font-size: min(calc(100cqi / (var(--letters) * 0.9)), 13rem);
+    font-size: min(calc(100cqi / (var(--letters) * var(--letter-width))), 13rem);
     white-space: nowrap;
+  }
+
+  /*
+   * In a narrow card the wide cut would leave the name small. A condensed cut
+   * (letters under 0.47em) fits the same width at nearly twice the size.
+   */
+  @container (max-width: 34rem) {
+    .title {
+      --wide: 60;
+      --letter-width: 0.47;
+    }
   }
 
   .title a {
@@ -203,13 +202,15 @@ const NEW_TAB = { target: "_blank", rel: "noopener" } as const;
   .facts {
     display: flex;
     flex-wrap: wrap;
+    align-items: start;
     gap: 1.25rem clamp(1.25rem, 3cqi, 3rem);
   }
 
+  /* Labels are kept to a few words in the registry so they stay on one line under the number. */
   .facts li {
     display: grid;
-    align-content: end;
-    max-width: 13rem;
+    align-content: start;
+    white-space: nowrap;
     font-size: 0.95rem;
     font-weight: 500;
     line-height: 1.25;
@@ -220,38 +221,13 @@ const NEW_TAB = { target: "_blank", rel: "noopener" } as const;
     font-variation-settings: "wdth" 75;
   }
 
-  .more {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: 1px;
-    margin-bottom: 8svh;
-    border-radius: var(--radius);
-    overflow: clip;
-    background: var(--line);
-  }
-
-  .more li {
-    display: grid;
-    gap: 0.25rem;
-    padding: 1.5rem;
-    background: rgb(8 7 12 / 0.9);
-    color: var(--ink-soft);
-  }
-
-  .more a {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--ink);
-    text-underline-offset: 0.2em;
-  }
-
   /* With motion, each name starts condensed and widens as its card arrives. Left-aligned, so nothing shifts. */
   :global(.motion) .title {
-    --stretch: 60;
+    --stretch: 50;
     transition: font-variation-settings 0.9s var(--ease);
   }
 
   :global(.motion) .card:global(.is-active) .title {
-    --stretch: 118;
+    --stretch: var(--wide);
   }
 </style>

@@ -50,9 +50,9 @@ float fbm(vec2 p) {
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / resolution.y;
 
-  // Bend the field around the pointer.
+  // Bend the field slightly around the pointer.
   vec2 toPointer = uv - pointer;
-  uv += toPointer * 0.35 * exp(-dot(toPointer, toPointer) * 5.0);
+  uv += toPointer * 0.14 * exp(-dot(toPointer, toPointer) * 5.0);
 
   vec2 q = vec2(fbm(uv * 1.3 + time * 0.06), fbm(uv * 1.3 + vec2(5.2, 1.3) - time * 0.05));
   vec2 w = vec2(fbm(uv * 1.1 + 3.0 * q + time * 0.04), fbm(uv * 1.1 + 3.0 * q + vec2(8.3, 2.8)));

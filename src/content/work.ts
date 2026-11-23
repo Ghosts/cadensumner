@@ -43,7 +43,7 @@ export const projects: readonly Project[] = [
     kind: "Directory, free to list",
     summary: "The open directory for MCP servers.",
     logo: "allmcps.svg",
-    facts: ["allMcpsServers", "allMcpsCategories", "allMcpsClients"],
+    facts: ["allMcpsServers", "allMcpsCategories"],
     tags: ["Next.js", "Workers", "D1"],
     surface: "#00d5ee",
     ink: "#021018",
@@ -60,6 +60,20 @@ export const projects: readonly Project[] = [
     surface: "#5ef2b4",
     ink: "#04121a",
     palette: ["#5ef2b4", "#0b6b8c", "#05091a"],
+  },
+  {
+    name: "ResumeSkip",
+    url: "https://resumeskip.com",
+    kind: "Web app and browser extension",
+    summary:
+      "Tailors the resume you already have to a job posting, from the web app or from the listing itself with the extension.",
+    logo: "resumeskip.svg",
+    logoHasTile: true,
+    facts: ["resumeSkipBrowsers", "resumeSkipLanguages"],
+    tags: ["React", "Convex", "WXT", "MCP"],
+    surface: "#ff8a4c",
+    ink: "#1f1410",
+    palette: ["#ff6b35", "#ffd9a8", "#1f1a17"],
   },
   {
     name: "LopeBase",
@@ -88,17 +102,3 @@ export const projects: readonly Project[] = [
     palette: ["#ff2e93", "#ffe94a", "#1a0a14"],
   },
 ];
-
-/** Smaller projects, listed under the cards. */
-export const moreProjects = [
-  {
-    name: "3D Printer Fits",
-    url: "https://3dprinterfits.com",
-    summary: "Which parts and upgrades fit which 3D printer.",
-  },
-  {
-    name: "ResumeSkip",
-    url: "https://resumeskip.com",
-    summary: "Tailors a resume to a job listing and tracks applications.",
-  },
-] as const;

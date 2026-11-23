@@ -35,14 +35,14 @@ describe("heroState", () => {
 
 describe("scrollEnergy", () => {
   it("rises with scroll speed in either direction and is capped", () => {
-    expect(scrollEnergy(0, 0.02)).toBeGreaterThan(0.3);
+    expect(scrollEnergy(0, 0.02)).toBeGreaterThan(0.05);
     expect(scrollEnergy(0, -0.02)).toBe(scrollEnergy(0, 0.02));
     expect(scrollEnergy(0, 5)).toBeLessThanOrEqual(1);
   });
 
   it("settles back to calm when scrolling stops", () => {
     let energy = 1;
-    for (let frame = 0; frame < 120; frame++) energy = scrollEnergy(energy, 0);
+    for (let frame = 0; frame < 60; frame++) energy = scrollEnergy(energy, 0);
     expect(energy).toBeLessThan(0.01);
   });
 });

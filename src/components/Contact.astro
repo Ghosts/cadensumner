@@ -23,11 +23,19 @@ const palette = ["#ff5a3c", "#ffd9a8", "#3b0d5c"].join(",");
     container-type: inline-size;
   }
 
-  /* Ten characters at this stretch are about 7.4em wide; size to fill the row on one line. */
+  /* "LET'S TALK" is about 5.5em wide at this stretch; size it to fill the row on one line. */
   .heading {
     --stretch: 100;
-    font-size: min(calc(100cqi / 7.6), 20rem);
+    font-size: min(calc(100cqi / 5.7), 20rem);
     white-space: nowrap;
+  }
+
+  /* Narrow screens get the condensed cut, about 3.1em wide, at nearly twice the size. */
+  @container (max-width: 34rem) {
+    .heading {
+      --stretch: 60;
+      font-size: calc(100cqi / 3.2);
+    }
   }
 
   .links {

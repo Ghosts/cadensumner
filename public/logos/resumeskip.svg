@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="456" height="456" viewBox="28 28 456 456" role="img" aria-label="ResumeSkip logo">
+  <!-- Sunrise mark from resume-skip public/logo.svg: an R followed by a forward chevron.
+       viewBox is cropped to the tile so it fills the app icon frame edge to edge. -->
+  <rect x="28" y="28" width="456" height="456" rx="128" fill="#1F1A17"/>
+  <g fill="none" stroke-width="56" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M136 332 V 186 H 208 A 50 50 0 0 1 208 286 H 190 L 240 332" stroke="#FFFBF5"/>
+    <path d="M318 186 L 382 259 L 318 332" stroke="#FF6B35"/>
+  </g>
+</svg>

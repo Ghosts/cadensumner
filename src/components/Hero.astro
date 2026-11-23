@@ -137,9 +137,22 @@ const zoomIndex = lastName.length - 2;
     height: 250svh;
   }
 
+  /*
+   * On a narrow screen the wide cut would make the name small. The condensed cut
+   * of the same font fits the width at more than twice the height, so the letters
+   * stay big windows onto the canvas. "SUMNER" is about 2.7em wide at this stretch and weight.
+   * The weight drops a step so the counters of A, D and E stay open.
+   */
   @media (max-width: 40rem) {
+    .name {
+      --stretch: 62;
+      font-weight: 800;
+      font-size: min(calc(92vw / 2.75), 30svh);
+    }
+
     .meta {
       grid-template-columns: 1fr;
+      align-content: end;
       justify-items: center;
       gap: 0.75rem;
       text-align: center;

@@ -34,9 +34,9 @@ const TIME_OFFSET = 12;
 const STILL_REDRAW_INTERVAL = 250;
 /** Field turbulence at rest, and how much scrolling adds to it. */
 const BASE_WARP = 3.4;
-const SCROLL_WARP = 1.6;
+const SCROLL_WARP = 0.25;
 /** How many times faster the field flows at full scroll energy. */
-const SCROLL_SPEED_UP = 5;
+const SCROLL_SPEED_UP = 1.2;
 
 const root = document.documentElement;
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -205,6 +205,8 @@ function start() {
   }
 
   window.addEventListener("pointermove", (event) => {
+    // A finger landing on the screen is a jump, not a glide, so only a mouse bends the field.
+    if (event.pointerType !== "mouse") return;
     pointerTarget = [
       (event.clientX - window.innerWidth / 2) / window.innerHeight,
       -(event.clientY - window.innerHeight / 2) / window.innerHeight,

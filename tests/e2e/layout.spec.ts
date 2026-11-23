@@ -120,7 +120,7 @@ for (const viewport of VIEWPORTS) {
 test("every project card opens its site in a new tab", async ({ page }) => {
   await page.goto("/");
   const links = page.locator("[data-card] h3 a");
-  await expect(links).toHaveCount(5);
+  await expect(links).toHaveCount(6);
   for (const link of await links.all()) {
     await expect(link).toHaveAttribute("href", /^https:\/\//);
     await expect(link).toHaveAttribute("target", "_blank");
@@ -136,3 +136,14 @@ function coverBox(link: Element) {
   const style = getComputedStyle(link, "::after");
   return { width: Number.parseFloat(style.width) };
 }
+
+test("both web fonts load", async ({ page }) => {
+  // A misplaced @import once dropped the body font silently; the page still looked plausible.
+  await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
+  const loaded = await page.evaluate(() =>
+    [...document.fonts].filter((font) => font.status === "loaded").map((font) => font.family),
+  );
+  expect(loaded.join()).toContain("Geist Variable");
+  expect(loaded.join()).toContain("Anybody Variable");
+});

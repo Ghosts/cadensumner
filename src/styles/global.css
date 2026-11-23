@@ -1,5 +1,21 @@
-@import "@fontsource-variable/anybody/wdth.css";
 @import "@fontsource-variable/geist/wght.css";
+
+/*
+ * The display font is declared here, not imported from the package's CSS, for
+ * two reasons: only the Latin subset is needed, and `font-display: block` holds
+ * the big headings until the font arrives. With `swap` the fallback font, which
+ * is far wider than the condensed cut, paints first and the name jumps when the
+ * real font loads. Base.astro preloads the file so the wait is short.
+ */
+@font-face {
+  font-family: "Anybody Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 50% 150%;
+  font-display: block;
+  src: url("@fontsource-variable/anybody/files/anybody-latin-wdth-normal.woff2")
+    format("woff2-variations");
+}
 
 :root {
   --bg: #060509;

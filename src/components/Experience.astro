@@ -36,7 +36,7 @@ import { formatPeriod } from "@/lib/markdown";
     display: grid;
     grid-template-columns: 1.2fr 0.9fr 2fr;
     gap: 1.25rem;
-    align-items: baseline;
+    align-items: start;
     padding-block: 1.6rem;
     border-top: 1px solid var(--line);
   }
@@ -58,7 +58,9 @@ import { formatPeriod } from "@/lib/markdown";
     color: var(--accent);
   }
 
+  /* Nudged down so the first line sits level with the caps of the company name beside it. */
   .summary {
+    padding-top: 0.3rem;
     max-width: 52ch;
     color: var(--ink-soft);
   }

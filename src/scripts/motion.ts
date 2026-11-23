@@ -42,16 +42,17 @@ export function progressThrough(position: number, start: number, end: number): n
 }
 
 /**
- * How stirred up the field is, from how fast the page is scrolling. Rises quickly
- * with scroll speed and decays on its own, so the background surges while you
- * scroll and settles when you stop.
+ * How stirred up the field is, from how fast the page is scrolling. Rises with
+ * scroll speed and decays on its own, so the background picks up a little while
+ * you scroll and settles when you stop. Kept gentle on purpose: a strong
+ * response reads as the whole screen lurching.
  *
  * @param energy current energy, 0 (calm) to 1 (fully stirred)
  * @param scrolled distance scrolled this frame, as a fraction of the viewport height
  */
 export function scrollEnergy(energy: number, scrolled: number): number {
-  const pushed = Math.max(energy, clamp(Math.abs(scrolled) * 18));
-  return pushed * 0.94;
+  const pushed = Math.max(energy, clamp(Math.abs(scrolled) * 6));
+  return pushed * 0.9;
 }
 
 export type Rgb = [number, number, number];

@@ -1,6 +1,6 @@
 import { roles } from "@/content/experience";
 import { profile } from "@/content/profile";
-import { moreProjects, projects } from "@/content/work";
+import { projects } from "@/content/work";
 import type { ResolvedFacts } from "@/facts/store";
 
 /**
@@ -24,7 +24,6 @@ export function renderHomeMarkdown(facts: ResolvedFacts): string {
         .join("; ");
       return `- [${project.name}](${project.url}) (${project.kind}): ${project.summary} ${numbers}.`;
     }),
-    ...moreProjects.map((project) => `- [${project.name}](${project.url}): ${project.summary}`),
     "",
     "## Experience",
     "",
