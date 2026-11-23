@@ -64,3 +64,11 @@ test("shared links get a preview image", async ({ page, request }) => {
   const response = await request.get("/share.jpg");
   expect(response.headers()["content-type"]).toContain("image/jpeg");
 });
+
+test("the sitemap lists every page and robots.txt points to it", async ({ request }) => {
+  const sitemap = await (await request.get("/sitemap.xml")).text();
+  expect(sitemap).toContain("<loc>https://cadensumner.com/</loc>");
+  expect(sitemap).toContain("<loc>https://cadensumner.com/resume/</loc>");
+  const robots = await (await request.get("/robots.txt")).text();
+  expect(robots).toContain("Sitemap: https://cadensumner.com/sitemap.xml");
+});

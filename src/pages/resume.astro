@@ -24,7 +24,7 @@ const title = `${profile.name}: resume`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={`Resume of ${profile.name}, ${profile.role.toLowerCase()} in ${profile.location}.`} />
-    <link rel="canonical" href={new URL("/resume", Astro.site).href} />
+    <link rel="canonical" href={new URL("/resume/", Astro.site).href} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/pdf" href={profile.resumePdf} title="Resume (PDF)" />
     <link rel="alternate" type="application/json" href="/resume.json" title="Resume (JSON Resume)" />
