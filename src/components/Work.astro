@@ -42,8 +42,13 @@ const NEW_TAB = { target: "_blank", rel: "noopener" } as const;
 
         <h3 class="display title">
           <a href={project.url} {...NEW_TAB}>
-            {project.name}
-            <span class="visually-hidden">(opens in a new tab)</span>
+            <span class="visually-hidden">{project.name} (opens in a new tab)</span>
+            {/* One span per letter so the name can be spread to both edges of the card. */}
+            <span class="letters" aria-hidden="true">
+              {[...project.name].map((letter, i) => (
+                <span style={`--i:${i}`}>{letter === " " ? " " : letter}</span>
+              ))}
+            </span>
           </a>
         </h3>
 
@@ -76,7 +81,7 @@ const NEW_TAB = { target: "_blank", rel: "noopener" } as const;
   .card {
     position: sticky;
     top: 6svh;
-    min-height: 84svh;
+    min-height: clamp(24rem, 62svh, 38rem);
     margin-bottom: 8svh;
     padding: clamp(1.25rem, 3vw, 3rem);
     display: grid;
@@ -147,8 +152,21 @@ const NEW_TAB = { target: "_blank", rel: "noopener" } as const;
     --letter-width: 0.9;
     --stretch: var(--wide);
     align-self: center;
-    font-size: min(calc(100cqi / (var(--letters) * var(--letter-width))), 13rem);
+    font-size: min(calc(100cqi / (var(--letters) * var(--letter-width))), 16rem);
     white-space: nowrap;
+  }
+
+  /*
+   * Names differ in width, so sizing by letter count alone leaves some short of
+   * the right edge. Spreading the letters makes every name span the card exactly,
+   * at any stretch, so the left and right edges line up with everything else.
+   */
+  .letters {
+    display: flex;
+    justify-content: space-between;
+    /* Clips the letters while they rise into place. The padding keeps the tops of the caps inside. */
+    overflow: clip;
+    padding-block: 0.04em;
   }
 
   /*
@@ -221,13 +239,14 @@ const NEW_TAB = { target: "_blank", rel: "noopener" } as const;
     font-variation-settings: "wdth" 75;
   }
 
-  /* With motion, each name starts condensed and widens as its card arrives. Left-aligned, so nothing shifts. */
-  :global(.motion) .title {
-    --stretch: 50;
-    transition: font-variation-settings 0.9s var(--ease);
+  /* With motion, the letters of each name rise into place one after another as its card arrives. */
+  :global(.motion) .letters span {
+    transform: translateY(110%);
+    transition: transform 0.7s var(--ease);
+    transition-delay: calc(var(--i) * 35ms);
   }
 
-  :global(.motion) .card:global(.is-active) .title {
-    --stretch: var(--wide);
+  :global(.motion) .card:global(.is-active) .letters span {
+    transform: none;
   }
 </style>

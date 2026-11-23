@@ -145,7 +145,7 @@ function start() {
   function updateCards(viewportHeight: number) {
     for (const [i, card] of cards.entries()) {
       const rect = card.getBoundingClientRect();
-      card.classList.toggle("is-active", rect.top < viewportHeight * 0.6);
+      card.classList.toggle("is-active", rect.top < viewportHeight * 0.85);
       const next = cards[i + 1]?.getBoundingClientRect();
       const covered = next ? clamp(1 - (next.top - rect.top) / rect.height) : 0;
       card.style.setProperty("--covered", covered.toFixed(3));
