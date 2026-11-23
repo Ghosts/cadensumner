@@ -1,0 +1,58 @@
+---
+import { profile } from "@/content/profile";
+import type { ResolvedFact } from "@/facts/store";
+
+interface Props {
+  contributions: ResolvedFact;
+}
+
+const { contributions } = Astro.props;
+const words = profile.statement.split(" ");
+---
+
+<section class="section statement" id="intro" tabindex="-1">
+  {/* Each word lights up as the section scrolls past. Screen readers get the plain sentence. */}
+  <h2 class="sentence" data-statement>
+    <span class="visually-hidden">{profile.statement}</span>
+    <span aria-hidden="true">
+      {words.map((word) => <><span class="word" data-word>{word}</span>{" "}</>)}
+    </span>
+  </h2>
+  <p class="proof">
+    <a href={contributions.source}>{contributions.text} {contributions.label}</a>.
+  </p>
+</section>
+
+<style>
+  .statement {
+    min-height: 120svh;
+    display: grid;
+    align-content: center;
+    gap: 2rem;
+  }
+
+  .sentence {
+    max-width: 17ch;
+    font: 600 clamp(2.1rem, 5.6vw, 6rem) / 1.02 var(--font-body);
+    letter-spacing: -0.04em;
+  }
+
+  .proof {
+    font-size: clamp(1rem, 1.4vw, 1.35rem);
+    color: var(--ink-soft);
+  }
+
+  .proof a {
+    text-underline-offset: 0.2em;
+  }
+
+  /* Unlit words are dimmed with a color that still passes AA contrast, not with opacity. */
+  :global(.motion) .word {
+    color: #8f899e;
+    transition: color 0.35s linear;
+  }
+
+  :global(.motion) .word:global(.is-lit) {
+    color: var(--ink);
+  }
+</style>

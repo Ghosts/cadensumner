@@ -1,0 +1,54 @@
+---
+import { profile } from "@/content/profile";
+
+const palette = ["#ff5a3c", "#ffd9a8", "#3b0d5c"].join(",");
+---
+
+<footer class="section contact" id="contact" data-palette={palette}>
+  <h2 class="display heading">Let's talk</h2>
+  <ul class="links">
+    {
+      profile.links.map((link) => (
+        <li>
+          <a href={link.url}>{link.label}</a>
+        </li>
+      ))
+    }
+  </ul>
+</footer>
+
+<style>
+  .contact {
+    padding-block: 14svh 2.5rem;
+    container-type: inline-size;
+  }
+
+  /* Ten characters at this stretch are about 7.4em wide; size to fill the row on one line. */
+  .heading {
+    --stretch: 100;
+    font-size: min(calc(100cqi / 7.6), 20rem);
+    white-space: nowrap;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 2rem;
+  }
+
+  .links a {
+    display: block;
+    padding: 0.8rem 1.4rem;
+    border-radius: 99px;
+    background: var(--ink);
+    color: var(--bg);
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .links a:hover {
+    transform: translateY(-3px);
+  }
+</style>

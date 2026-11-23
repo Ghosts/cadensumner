@@ -1,0 +1,28 @@
+---
+import Contact from "@/components/Contact.astro";
+import Experience from "@/components/Experience.astro";
+import Hero from "@/components/Hero.astro";
+import Statement from "@/components/Statement.astro";
+import Work from "@/components/Work.astro";
+import { profile } from "@/content/profile";
+import Base from "@/layouts/Base.astro";
+import { currentFacts, HOME_CACHE_HEADERS } from "@/lib/home";
+
+// Rendered on request so the numbers come from the latest refresh, then cached at the edge.
+export const prerender = false;
+
+const facts = await currentFacts();
+for (const [name, value] of Object.entries(HOME_CACHE_HEADERS)) {
+  Astro.response.headers.set(name, value);
+}
+---
+
+<Base title={`${profile.name}, ${profile.role.toLowerCase()}`} description={`${profile.role} in ${profile.location}. ${profile.summary}`}>
+  <Hero />
+  <main>
+    <Statement contributions={facts.githubContributions} />
+    <Work facts={facts} />
+    <Experience />
+  </main>
+  <Contact />
+</Base>

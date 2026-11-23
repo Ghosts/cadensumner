@@ -1,0 +1,45 @@
+---
+import "@/styles/global.css";
+import { profile } from "@/content/profile";
+import { profilePageJsonLd } from "@/lib/structured-data";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#060509" />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+
+    {/* Machine-readable versions of this page. Agents find them here, so the page needs no visible notice. */}
+    <link rel="alternate" type="text/markdown" href="/index.md" title={`${profile.name} (Markdown)`} />
+    <link rel="alternate" type="application/json" href="/resume.json" title="Resume (JSON Resume)" />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(profilePageJsonLd())} />
+  </head>
+  <body>
+    <a class="skip-link" href="#intro">Skip to content</a>
+    <div class="backdrop" aria-hidden="true"><canvas data-fluid></canvas></div>
+    <slot />
+    <script>
+      import "@/scripts/main";
+    </script>
+  </body>
+</html>

@@ -1,0 +1,197 @@
+---
+import { moreProjects, projects } from "@/content/work";
+import type { ResolvedFacts } from "@/facts/store";
+
+interface Props {
+  facts: ResolvedFacts;
+}
+
+const { facts } = Astro.props;
+---
+
+<section class="section work" id="work" aria-labelledby="work-title">
+  <h2 class="visually-hidden" id="work-title">Work</h2>
+
+  {
+    projects.map((project) => {
+      const fact = facts[project.fact];
+      return (
+        <article
+          class="card"
+          data-card
+          data-palette={project.palette.join(",")}
+          style={`--surface:${project.surface};--ink:${project.ink};--letters:${project.name.length}`}
+        >
+          <ul class="tags">
+            {project.tags.map((tag) => <li>{tag}</li>)}
+          </ul>
+          <h3 class="display title">
+            <a href={project.url}>{project.name}</a>
+          </h3>
+          <div class="details">
+            <p class="summary">{project.summary}</p>
+            <p class="fact">
+              <strong>{fact.text}</strong>
+              <span>{fact.label}</span>
+            </p>
+          </div>
+        </article>
+      );
+    })
+  }
+
+  <ul class="more">
+    {
+      moreProjects.map((project) => (
+        <li>
+          <a href={project.url}>{project.name}</a>
+          <span>{project.summary}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .work {
+    padding-top: 12svh;
+  }
+
+  /* Cards pin near the top and stack; each new one slides over the last. */
+  .card {
+    position: sticky;
+    top: 6svh;
+    min-height: 84svh;
+    margin-bottom: 8svh;
+    padding: clamp(1.25rem, 3vw, 3rem);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 1.5rem;
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    container-type: inline-size;
+    transform-origin: 50% 0;
+    transform: scale(calc(1 - var(--covered, 0) * 0.06));
+    filter: brightness(calc(1 - var(--covered, 0) * 0.45));
+    box-shadow: 0 -2rem 5rem -2rem rgb(0 0 0 / 0.7);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .tags li {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid currentColor;
+    border-radius: 99px;
+  }
+
+  /*
+   * The name fills the card width at its widest stretch. Letters average under
+   * 0.9em wide there, so dividing the card width by (letters x 0.9) always fits.
+   */
+  .title {
+    --stretch: 118;
+    align-self: center;
+    font-size: min(calc(100cqi / (var(--letters) * 0.9)), 13rem);
+    white-space: nowrap;
+  }
+
+  .title a {
+    text-decoration: none;
+  }
+
+  /* The whole card is the link target, while the link text stays the project name. */
+  .title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+  }
+
+  .title a:focus-visible {
+    outline: none;
+  }
+
+  .title a:focus-visible::after {
+    outline: 3px solid var(--ink);
+    outline-offset: -8px;
+  }
+
+  .details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+  }
+
+  .summary {
+    max-width: 34ch;
+    font-size: clamp(1.05rem, 1.7vw, 1.6rem);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .fact {
+    display: grid;
+    justify-items: end;
+    text-align: right;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .fact strong {
+    font: 900 clamp(2.1rem, 4.6vw, 4.75rem) / 1 var(--font-display);
+    font-variation-settings: "wdth" 75;
+  }
+
+  .more {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1px;
+    margin-bottom: 8svh;
+    border-radius: var(--radius);
+    overflow: clip;
+    background: var(--line);
+  }
+
+  .more li {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1.5rem;
+    background: rgb(8 7 12 / 0.9);
+    color: var(--ink-soft);
+  }
+
+  .more a {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-underline-offset: 0.2em;
+  }
+
+  /* With motion, each name starts condensed and widens as its card arrives. Left-aligned, so nothing shifts. */
+  :global(.motion) .title {
+    --stretch: 60;
+    transition: font-variation-settings 0.9s var(--ease);
+  }
+
+  :global(.motion) .card:global(.is-active) .title {
+    --stretch: 118;
+  }
+
+  @media (max-width: 40rem) {
+    .fact {
+      justify-items: start;
+      text-align: left;
+    }
+  }
+</style>

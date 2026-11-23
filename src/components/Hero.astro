@@ -1,0 +1,148 @@
+---
+import { profile } from "@/content/profile";
+
+/** Colors of the field seen through the letters. */
+const palette = ["#cdbcff", "#ff5a3c", "#4a22e0"].join(",");
+const [firstName, lastName = ""] = profile.name.split(" ");
+/** The camera zooms into this letter of the last name as the page scrolls. */
+const zoomIndex = lastName.length - 2;
+---
+
+<header class="hero" data-hero data-palette={palette}>
+  {/* A near-black layer blended with `multiply`: the white letters become windows onto the canvas. */}
+  <div class="mask" data-hero-mask>
+    <h1 class="display name" data-hero-name>
+      {firstName}<br />{lastName.slice(0, zoomIndex)}<span data-zoom-target>{lastName[zoomIndex]}</span
+      >{lastName.slice(zoomIndex + 1)}
+    </h1>
+  </div>
+
+  <div class="meta" data-hero-meta>
+    <div class="grain" aria-hidden="true"></div>
+    <p class="intro"><strong>{profile.role} in Denver.</strong> {profile.summary}</p>
+    <a class="cue" href="#intro">
+      <span class="visually-hidden">Scroll to content</span>
+      <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+        <path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<style>
+  /* Without motion the hero is one screen tall and scrolls away like any section. */
+  .hero {
+    position: relative;
+    height: 100svh;
+  }
+
+  .mask,
+  .meta {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+  }
+
+  .mask {
+    display: grid;
+    place-items: center;
+    overflow: clip;
+    /* Not pure black, so a trace of the moving field shows through the dark. */
+    background: #0d0b13;
+    mix-blend-mode: multiply;
+  }
+
+  .name {
+    --stretch: 125;
+    /* "SUMNER" is 5.75em wide at this stretch; size it to fill the viewport width. */
+    font-size: min(calc(92vw / 5.75), 36svh);
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  .meta {
+    margin-top: -100svh;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    padding: var(--gutter);
+    overflow: clip;
+  }
+
+  .intro {
+    position: relative;
+    max-width: 40ch;
+    font-size: clamp(0.95rem, 1.25vw, 1.2rem);
+    line-height: 1.35;
+  }
+
+  .intro strong {
+    font-weight: 600;
+  }
+
+  .cue {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+  }
+
+  @keyframes breathe {
+    0%,
+    100% {
+      transform: translateY(-5px);
+    }
+    50% {
+      transform: translateY(5px);
+    }
+  }
+
+  /* Film grain over the dark, like a detuned television. One small noise tile, shifted in steps. */
+  .grain {
+    position: absolute;
+    inset: -50%;
+    opacity: 0.11;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  @keyframes static {
+    0% { transform: translate(0, 0); }
+    12% { transform: translate(-7%, 4%); }
+    25% { transform: translate(5%, -9%); }
+    37% { transform: translate(-11%, -3%); }
+    50% { transform: translate(8%, 7%); }
+    62% { transform: translate(-4%, 11%); }
+    75% { transform: translate(10%, -6%); }
+    87% { transform: translate(-9%, 8%); }
+  }
+
+  /* The cue and the grain only move for people who have not asked for less motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    .cue {
+      animation: breathe 2.4s ease-in-out infinite;
+    }
+
+    .grain {
+      animation: static 0.9s steps(1) infinite;
+    }
+  }
+
+  /* With motion the hero is taller: the extra scroll distance drives the zoom through the name. */
+  :global(.motion) .hero {
+    height: 250svh;
+  }
+
+  @media (max-width: 40rem) {
+    .meta {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      gap: 0.75rem;
+      text-align: center;
+    }
+  }
+</style>

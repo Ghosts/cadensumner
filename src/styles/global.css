@@ -1,0 +1,133 @@
+@import "@fontsource-variable/anybody/wdth.css";
+@import "@fontsource-variable/geist/wght.css";
+
+:root {
+  --bg: #060509;
+  --ink: #f4f1fa;
+  --ink-soft: #cbc5da;
+  --line: rgb(255 255 255 / 0.14);
+  --accent: #b9a6f2;
+
+  --font-display: "Anybody Variable", "Arial Black", sans-serif;
+  --font-body: "Geist Variable", system-ui, sans-serif;
+
+  --gutter: clamp(1rem, 2.4vw, 2.125rem);
+  --radius: 1.75rem;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font: 400 1rem / 1.5 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Heavy display type. `--stretch` drives the font's width axis. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-variation-settings: "wdth" var(--stretch, 110);
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.section {
+  padding-inline: var(--gutter);
+}
+
+.section-title {
+  font-size: clamp(2.5rem, 6.4vw, 6.5rem);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -4rem;
+  z-index: 10;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: var(--gutter);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*
+ * The background. A CSS gradient paints first and stays if WebGL is unavailable;
+ * the canvas fades in over it once the shader is running.
+ */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, #4a22e0, #cdbcff 45%, #ff5a3c);
+}
+
+.backdrop canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s linear;
+}
+
+.has-fluid .backdrop canvas {
+  opacity: 1;
+}
+
+/* Without the shader there is no brightness control, so dim the gradient under the text instead. */
+html:not(.has-fluid) main,
+html:not(.has-fluid) footer {
+  background: rgb(6 5 9 / 0.72);
+}
