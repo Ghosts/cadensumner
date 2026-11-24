@@ -1,5 +1,6 @@
 ---
-import { roles } from "@/content/experience";
+import EmployerLogo from "@/components/EmployerLogo.astro";
+import { coauthorCredit, publications, roles } from "@/content/experience";
 import { formatPeriod } from "@/lib/markdown";
 ---
 
@@ -10,13 +11,40 @@ import { formatPeriod } from "@/lib/markdown";
       roles.map((role) => (
         <li class="role">
           <div>
-            <h3 class="display company">{role.company}</h3>
+            {role.logo ? (
+              <h3 class="logo">
+                <span class="visually-hidden">{role.company}</span>
+                <EmployerLogo logo={role.logo} hidden />
+              </h3>
+            ) : (
+              <h3 class="display company">{role.company}</h3>
+            )}
             <p class="period">
+              {/* The Wand logo alone would not say WeMod, the name on the rest of the resume. */}
+              {role.logo && role.logo.name !== role.company ? `${role.company}. ` : ""}
               {role.title}, {formatPeriod(role.start, role.end)}
             </p>
           </div>
           <p class="headline">{role.headline}</p>
           <p class="summary">{role.summary}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2 class="display section-title publications-title" id="publications-title">Writing and press</h2>
+  <ul aria-labelledby="publications-title">
+    {
+      publications.map((publication) => (
+        <li class="role">
+          <h3 class="paper">
+            <a href={publication.url}>{publication.title}</a>
+          </h3>
+          <p class="headline">{publication.year}</p>
+          <p class="summary">
+            {publication.summary} {coauthorCredit(publication)}
+            {publication.venue}.
+          </p>
         </li>
       ))
     }
@@ -41,6 +69,22 @@ import { formatPeriod } from "@/lib/markdown";
     border-top: 1px solid var(--line);
   }
 
+  .publications-title {
+    margin-top: 14svh;
+  }
+
+  .paper {
+    max-width: 26ch;
+    font-size: clamp(1.15rem, 1.7vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .paper a {
+    text-underline-offset: 0.18em;
+  }
+
   .company {
     --stretch: 90;
     font-size: clamp(1.75rem, 3.4vw, 3.5rem);
@@ -50,6 +94,14 @@ import { formatPeriod } from "@/lib/markdown";
     margin-top: 0.5rem;
     color: var(--ink-soft);
     font-size: 0.95rem;
+  }
+
+  /* Sized so each logo stands about as tall as the display type it replaces. */
+  .logo {
+    display: flex;
+    align-items: center;
+    height: clamp(1.75rem, 3.4vw, 3.5rem);
+    --logo: clamp(1.6rem, 3vw, 3.1rem);
   }
 
   .headline {

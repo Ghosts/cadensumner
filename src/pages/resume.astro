@@ -1,7 +1,7 @@
 ---
 // Imported here, not with @import in the style block, so the font file URLs are resolved by the build.
 import "@fontsource-variable/geist/wght.css";
-import { roles } from "@/content/experience";
+import { coauthorCredit, publications, roles } from "@/content/experience";
 import { profile } from "@/content/profile";
 import { projects } from "@/content/work";
 import { formatPeriod } from "@/lib/markdown";
@@ -88,8 +88,16 @@ const title = `${profile.name}: resume`;
       </section>
 
       <section aria-labelledby="education">
-        <h2 id="education">Education</h2>
+        <h2 id="education">Education and publication</h2>
         <p>{profile.education}</p>
+        {
+          publications.filter((publication) => publication.kind === "paper").map((publication) => (
+            <p>
+              <a href={publication.url}>{publication.title}</a>. {coauthorCredit(publication)}
+              {publication.venue}, {publication.year}.
+            </p>
+          ))
+        }
       </section>
     </main>
   </body>
@@ -249,7 +257,7 @@ const title = `${profile.name}: resume`;
   /* Tightened so the whole resume fits on one letter page. */
   @media print {
     body {
-      font-size: 8.4pt;
+      font-size: 8.2pt;
       line-height: 1.33;
     }
 
@@ -258,16 +266,16 @@ const title = `${profile.name}: resume`;
     }
 
     section {
-      margin-top: 0.7rem;
+      margin-top: 0.55rem;
     }
 
     article {
-      margin-top: 0.45rem;
+      margin-top: 0.4rem;
     }
 
     .contact {
       gap: 0.2rem 0.8rem;
-      font-size: 8.4pt;
+      font-size: 8.2pt;
     }
 
     .projects,

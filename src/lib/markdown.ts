@@ -1,4 +1,4 @@
-import { roles } from "@/content/experience";
+import { coauthorCredit, publications, roles } from "@/content/experience";
 import { profile } from "@/content/profile";
 import { projects } from "@/content/work";
 import type { ResolvedFacts } from "@/facts/store";
@@ -30,6 +30,13 @@ export function renderHomeMarkdown(facts: ResolvedFacts): string {
     ...roles.map(
       (role) =>
         `- **${role.company}**, ${role.title} (${formatPeriod(role.start, role.end)}). ${role.summary}`,
+    ),
+    "",
+    "## Writing and press",
+    "",
+    ...publications.map(
+      (publication) =>
+        `- [${publication.title}](${publication.url}). ${publication.venue}, ${publication.year}. ${coauthorCredit(publication)}${publication.summary}`,
     ),
     "",
     `Education: ${profile.education}.`,

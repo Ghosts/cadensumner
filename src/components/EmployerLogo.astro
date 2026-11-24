@@ -1,0 +1,43 @@
+---
+import Dashlane from "@/assets/logos/dashlane.svg";
+import Visa from "@/assets/logos/visa.svg";
+import Wand from "@/assets/logos/wand.svg";
+import type { Role } from "@/content/experience";
+
+interface Props {
+  logo: NonNullable<Role["logo"]>;
+  /** Set when the name is already given in text beside the logo. */
+  hidden?: boolean;
+}
+
+/** One employer's logo. Its height comes from `--logo` on a parent. */
+const { logo, hidden = false } = Astro.props;
+const Logo = { wand: Wand, dashlane: Dashlane, visa: Visa }[logo.file];
+---
+
+<Logo
+  class:list={["employer-logo", logo.file]}
+  role={hidden ? undefined : "img"}
+  aria-label={hidden ? undefined : logo.name}
+  aria-hidden={hidden ? "true" : undefined}
+/>
+
+<style is:global>
+  /*
+   * Each mark is a different shape, so equal heights would not look equal:
+   * the long, heavy Wand letters are set lower and the light Dashlane type taller.
+   */
+  .employer-logo {
+    display: block;
+    width: auto;
+    height: var(--logo);
+  }
+
+  .employer-logo.wand {
+    height: calc(var(--logo) * 0.72);
+  }
+
+  .employer-logo.dashlane {
+    height: calc(var(--logo) * 1.15);
+  }
+</style>

@@ -1,4 +1,5 @@
 ---
+import Employers from "@/components/Employers.astro";
 import { profile } from "@/content/profile";
 import type { ResolvedFact } from "@/facts/store";
 
@@ -21,6 +22,9 @@ const words = profile.statement.split(" ");
   <p class="proof">
     <a href={contributions.source}>{contributions.text} {contributions.label}</a>.
   </p>
+  <div class="employers">
+    <Employers />
+  </div>
 </section>
 
 <style>
@@ -44,6 +48,10 @@ const words = profile.statement.split(" ");
 
   .proof a {
     text-underline-offset: 0.2em;
+  }
+
+  .employers {
+    margin-top: 2rem;
   }
 
   /* Unlit words are dimmed with a color that still passes AA contrast, not with opacity. */

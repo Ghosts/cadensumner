@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { roles } from "@/content/experience";
+import { publications, roles } from "@/content/experience";
 import { profile } from "@/content/profile";
 import { projects } from "@/content/work";
 import { resolveFacts } from "@/facts/store";
@@ -63,6 +63,7 @@ describe("markdown version", () => {
     for (const project of projects) expect(markdown).toContain(`[${project.name}](${project.url})`);
     for (const role of roles) expect(markdown).toContain(role.company);
     for (const link of profile.links) expect(markdown).toContain(link.url);
+    for (const paper of publications) expect(markdown).toContain(`[${paper.title}](${paper.url})`);
   });
 
   it("cites a source next to each number", () => {

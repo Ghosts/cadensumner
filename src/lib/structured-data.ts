@@ -1,4 +1,4 @@
-import { roles } from "@/content/experience";
+import { publications, roles } from "@/content/experience";
 import { profile } from "@/content/profile";
 import { projects } from "@/content/work";
 
@@ -57,6 +57,15 @@ export function jsonResume() {
         area: "Computer Science and Psychology",
       },
     ],
+    publications: publications
+      .filter((publication) => publication.kind !== "press")
+      .map((publication) => ({
+        name: publication.title,
+        publisher: publication.venue,
+        releaseDate: String(publication.year),
+        url: publication.url,
+        summary: publication.summary,
+      })),
     projects: projects.map((project) => ({
       name: project.name,
       url: project.url,

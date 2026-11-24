@@ -6,7 +6,7 @@ export const profile = {
   timeZone: "America/Denver",
   url: "https://cadensumner.com",
   summary:
-    "Eight years at WeMod, Dashlane and Visa. I also run Jackalope Digital, where I build tools for coding agents.",
+    "Eight years at WeMod (Wand), Dashlane and Visa. I also run Jackalope Digital, where I build tools for coding agents.",
   statement:
     "I build software people use. Eight years on signup, onboarding and growth. The last year on tools for coding agents.",
   education: "B.S. Computer Science and Psychology, Michigan Technological University",

@@ -1,0 +1,27 @@
+---
+import EmployerLogo from "@/components/EmployerLogo.astro";
+import { roles } from "@/content/experience";
+
+/** The logos of past and current employers, in one row. */
+const logos = roles.flatMap((role) => (role.logo ? [role.logo] : []));
+---
+
+<ul class="employers" aria-label="Employers">
+  {
+    logos.map((logo) => (
+      <li>
+        <EmployerLogo logo={logo} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .employers {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem clamp(1.5rem, 5vw, 4.5rem);
+    --logo: clamp(1.25rem, 2.4vw, 2.25rem);
+  }
+</style>
