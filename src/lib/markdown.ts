@@ -47,6 +47,8 @@ export function renderHomeMarkdown(facts: ResolvedFacts): string {
     "",
     `Resume: ${profile.url}/resume (PDF: ${profile.url}${profile.resumePdf}, JSON: ${profile.url}/resume.json)`,
     "",
+    `MCP server: ${profile.url}/mcp (Streamable HTTP, no sign-in). Source for this site: ${profile.repository}`,
+    "",
   ];
   return lines.join("\n");
 }

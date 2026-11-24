@@ -72,3 +72,39 @@ test("the sitemap lists every page and robots.txt points to it", async ({ reques
   const robots = await (await request.get("/robots.txt")).text();
   expect(robots).toContain("Sitemap: https://cadensumner.com/sitemap.xml");
 });
+
+test("/mcp answers an MCP client", async ({ request }) => {
+  const rpc = async (method: string, params: unknown = {}) => {
+    const response = await request.post("/mcp", {
+      data: { jsonrpc: "2.0", id: 1, method, params },
+      headers: { accept: "application/json, text/event-stream" },
+    });
+    expect(response.headers()["access-control-allow-origin"]).toBe("*");
+    return (await response.json()).result;
+  };
+
+  const initialized = await rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {} });
+  expect(initialized.serverInfo.name).toBe("cadensumner");
+
+  const { tools } = await rpc("tools/list");
+  expect(tools.map((tool: { name: string }) => tool.name)).toContain("get_experience");
+
+  const projects = await rpc("tools/call", { name: "list_projects", arguments: {} });
+  expect(projects.structuredContent.projects[0].name).toBe("Jackalope");
+
+  const notification = await request.post("/mcp", {
+    data: { jsonrpc: "2.0", method: "notifications/initialized" },
+  });
+  expect(notification.status()).toBe(202);
+  expect((await request.get("/mcp")).status()).toBe(405);
+});
+
+test("the page links to the MCP server and to how it was built", async ({ page, request }) => {
+  await page.goto("/");
+  await expect(page.locator('link[rel="mcp"]')).toHaveAttribute("href", "/mcp");
+  await expect(page.getByRole("link", { name: "How this site is built" })).toHaveAttribute(
+    "href",
+    "https://github.com/Ghosts/cadensumner#readme",
+  );
+  expect(await (await request.get("/llms.txt")).text()).toContain("https://cadensumner.com/mcp");
+});

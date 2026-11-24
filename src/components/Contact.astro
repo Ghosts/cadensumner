@@ -18,6 +18,9 @@ const palette = ["#ff5a3c", "#ffd9a8", "#3b0d5c"].join(",");
       <a href={profile.resumePdf}>Resume (PDF)</a>
     </li>
   </ul>
+  <p class="colophon">
+    <a href={`${profile.repository}#readme`}>How this site is built</a>
+  </p>
 </footer>
 
 <style>
@@ -39,6 +42,16 @@ const palette = ["#ff5a3c", "#ffd9a8", "#3b0d5c"].join(",");
       --stretch: 60;
       font-size: calc(100cqi / 3.2);
     }
+  }
+
+  .colophon {
+    margin-top: 2.5rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  .colophon a {
+    text-underline-offset: 0.2em;
   }
 
   .links {

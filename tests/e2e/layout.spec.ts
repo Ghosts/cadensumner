@@ -22,7 +22,7 @@ function findClippedText(): string[] {
     problems.add(`page scrolls sideways (${document.documentElement.scrollWidth}px wide)`);
   }
 
-  // The hero name is meant to scale past the screen during the zoom.
+  // The hero name is drawn by its own script and fills the screen by design.
   const candidates = document.querySelectorAll("main *, footer *, [data-hero-meta] *");
   for (const element of candidates) {
     const hasOwnText = [...element.childNodes].some(

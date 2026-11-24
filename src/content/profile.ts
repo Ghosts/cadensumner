@@ -5,6 +5,8 @@ export const profile = {
   location: "Denver, Colorado",
   timeZone: "America/Denver",
   url: "https://cadensumner.com",
+  /** Public source for this site. */
+  repository: "https://github.com/Ghosts/cadensumner",
   summary:
     "Eight years at WeMod (Wand), Dashlane and Visa. I also run Jackalope Digital, where I build tools for coding agents.",
   statement:

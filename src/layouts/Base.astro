@@ -41,6 +41,7 @@ const shareImage = new URL("/share.jpg", Astro.site).href;
     {/* Machine-readable versions of this page. Agents find them here, so the page needs no visible notice. */}
     <link rel="alternate" type="text/markdown" href="/index.md" title={`${profile.name} (Markdown)`} />
     <link rel="alternate" type="application/json" href="/resume.json" title="Resume (JSON Resume)" />
+    <link rel="mcp" href="/mcp" title={`${profile.name} (MCP server)`} />
     <script type="application/ld+json" is:inline set:html={JSON.stringify(profilePageJsonLd())} />
   </head>
   <body>

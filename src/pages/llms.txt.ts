@@ -16,6 +16,10 @@ export const GET: APIRoute = () => {
     "",
     `The homepage also returns Markdown when requested with \`Accept: text/markdown\`.`,
     "",
+    "## MCP",
+    "",
+    `- [MCP server](${profile.url}/mcp): Streamable HTTP, no sign-in. Tools for the profile, work history, products, writing, resume and contact details.`,
+    "",
   ].join("\n");
   return new Response(body, { headers: { "content-type": "text/plain; charset=utf-8" } });
 };

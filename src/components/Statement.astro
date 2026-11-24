@@ -54,6 +54,25 @@ const words = profile.statement.split(" ");
     margin-top: 2rem;
   }
 
+  /*
+   * With motion the section starts under the end of the hero, so the sentence is
+   * already arriving as the name finishes dissolving and there is no empty screen
+   * between them. It fades and rises in; `--enter` is set from the scroll position.
+   */
+  :global(.motion) .statement {
+    position: relative;
+    z-index: 1;
+    margin-top: -42svh;
+    min-height: 112svh;
+    align-content: start;
+    padding-top: 20svh;
+  }
+
+  :global(.motion) .statement > * {
+    opacity: var(--enter, 1);
+    transform: translateY(calc((1 - var(--enter, 1)) * 2.5rem));
+  }
+
   /* Unlit words are dimmed with a color that still passes AA contrast, not with opacity. */
   :global(.motion) .word {
     color: #8f899e;

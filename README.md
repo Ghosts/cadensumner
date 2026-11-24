@@ -4,7 +4,7 @@ Source for [cadensumner.com](https://cadensumner.com), Caden Sumner's personal s
 
 One page, rendered by a Cloudflare Worker. The background is a WebGL shader, the scroll
 effects are a few hundred lines of TypeScript with no animation library, and the same
-content is served as Markdown and JSON for programs that ask for it.
+content is served as Markdown, JSON and an MCP server for programs that ask for it.
 
 ## How it is put together
 
@@ -12,10 +12,11 @@ content is served as Markdown and JSON for programs that ask for it.
 src/
   content/     What the site says: profile, projects, roles. Plain typed data.
   facts/       Every number on the site, with its source and how to refresh it.
-  lib/         Markdown, JSON Resume and schema.org output built from content.
+  lib/         Markdown, JSON Resume, schema.org and MCP output built from content.
   components/  One Astro component per section of the page.
-  scripts/     Browser code. motion.ts is the math, fluid/ is the shader, main.ts wires them to the page.
-  pages/       Routes: the page, /index.md, /resume.json, /llms.txt.
+  scripts/     Browser code. motion.ts is the math, fluid/ is the shader, ascii.ts dissolves the name,
+               webmcp.ts offers the tools to in-browser agents, main.ts wires them to the page.
+  pages/       Routes: the page, /index.md, /resume.json, /llms.txt, /mcp.
   middleware.ts  Returns Markdown for `/` when the client sends `Accept: text/markdown`.
   worker.ts    Worker entry: serves the site and refreshes facts on a cron schedule.
 tests/
@@ -40,7 +41,7 @@ cannot drift from it. With `bun run preview` running, `bun run assets` prints `/
 `public/caden-sumner-resume.pdf` and screenshots the hero to `public/share.jpg`. Run it after
 changing content or the hero, and commit the results.
 
-### One URL, three formats
+### One URL, four formats
 
 | Request                              | Response                                             |
 | ------------------------------------ | ---------------------------------------------------- |
@@ -50,12 +51,30 @@ changing content or the hero, and commit the results.
 | `GET /resume.json`                   | [JSON Resume](https://jsonresume.org)                |
 | `GET /resume`                        | Printable resume, also at `/caden-sumner-resume.pdf` |
 | `GET /llms.txt`                      | Index of the above                                   |
+| `POST /mcp`                          | [MCP](https://modelcontextprotocol.io) server        |
 
 All of them are generated from `src/content`, so they cannot drift apart.
+
+### MCP server and WebMCP
+
+`/mcp` is a Model Context Protocol server over Streamable HTTP: read-only, no sign-in, no
+session. It is written by hand in [`src/lib/mcp.ts`](src/lib/mcp.ts) (about a hundred lines)
+and serves the tools in [`src/lib/tools.ts`](src/lib/tools.ts): profile, work history,
+products with their live numbers, writing, resume and contact details.
+
+```sh
+claude mcp add --transport http cadensumner https://cadensumner.com/mcp
+```
+
+In a browser that supports [WebMCP](https://developer.chrome.com/docs/ai/webmcp), the page
+registers the same tools with `document.modelContext`, so an agent driving the tab can call
+them instead of reading the screen.
 
 ### Motion without cost
 
 - The page is readable with JavaScript off and with `prefers-reduced-motion`. Both are tested.
+- The name dissolves into characters as the hero scrolls. A canvas traces the real heading
+  into a grid of cells, and the heading itself stays in the page for screen readers.
 - A CSS gradient paints first. The shader starts after load, when the browser is idle.
 - The shader begins at half resolution and sharpens only if frames are fast. On a machine
   with no GPU acceleration it draws still frames instead of animating.
